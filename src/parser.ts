@@ -144,3 +144,61 @@ class categoriesBuilder {
         this.head = 0
     }
 }
+
+export class PathBuilder {
+    private fileName: string
+    private folderPath: string
+    private pathArray: string[] = []
+    private searchValue: string = ""
+    private generatedPath: string = ""
+
+    constructor(
+        fileName: string = "result.json",
+        folderPath: string = "./categories/"
+    ) {
+        this.fileName = fileName
+        this.folderPath = folderPath
+    }
+
+    findPath(searchValue: string) {
+        this.searchValue = searchValue
+        let rawData: string = fs
+            .readFileSync(this.folderPath + this.fileName)
+            .toString()
+        let jsonArray: JSON[] = JSON.parse(rawData)
+
+        for (let i = 0; i < jsonArray.length; i++) {
+            this.search(jsonArray[i])
+        }
+        let result: string = this.generatedPath
+        this.reset()
+        return result
+    }
+
+    search(categoriesTree: any, depth = 0) {
+        this.pathArray[depth] = categoriesTree.name
+
+        if (categoriesTree.value == this.searchValue) {
+            this.pathGenerator(depth)
+            return
+        } else {
+            if (categoriesTree.hasOwnProperty("subSchemas")) {
+                for (let i = 0; i < categoriesTree.subSchemas.length; i++) {
+                    this.search(categoriesTree.subSchemas[i], depth + 1)
+                }
+            }
+        }
+    }
+
+    pathGenerator(depth: number) {
+        for (let i = 0; i < depth; i++) {
+            this.generatedPath += this.pathArray[i] + " > "
+        }
+        this.generatedPath += this.pathArray[depth]
+    }
+
+    reset() {
+        this.pathArray = []
+        this.generatedPath = ""
+    }
+}
