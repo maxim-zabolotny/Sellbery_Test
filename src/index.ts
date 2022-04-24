@@ -6,12 +6,12 @@ const csvFileUrl = "https://pics.ebaystatic.com/aw/pics/catchanges/US_NewStructu
 const parser = new Parser(csvFileUrl)
 const pathBuilder = new PathBuilder()
 
-
+  
 const startScript = async () => {
     await parser.downloadFile()
     await parser.toJson()
     await parser.saveJson()
-    const path = pathBuilder.findPath('73464')
+    const path = pathBuilder.findPath('73464');
     const res: CategoriesTree = parser.getResult()
     console.log(res)
     console.log(path);
