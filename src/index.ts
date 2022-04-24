@@ -1,10 +1,12 @@
 import { CategoriesTree } from "./interfaces/CategoriesTree";
 import { Parser, PathBuilder } from "./parser";
 
-const csvFileUrl = "https://pics.ebaystatic.com/aw/pics/catchanges/US_NewStructure(Oct2019).csv"
+const csvFileUrl = "https://pics.ebaystatic.com/aw/pics/catchanges/US_NewStructure(Oct2019).csv";
 
 const parser = new Parser(csvFileUrl)
 const pathBuilder = new PathBuilder()
+
+
 const startScript = async () => {
     await parser.downloadFile()
     await parser.toJson()
